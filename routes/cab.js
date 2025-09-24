@@ -15,14 +15,15 @@ router.post('/allocate', auth, async (req, res) => {
   try {
     const createdCabs = [];
     for (const cabData of cabs) {
-      const { driverName, driverNumber, startingPoint, middleStoppagePoints, stoppingPoint, users } = cabData;
-      if (!driverName || !driverNumber || !startingPoint || !stoppingPoint || !Array.isArray(users) || users.length === 0 || users.length > 3) {
-        return res.status(400).json({ message: 'Each cab must have driverName, driverNumber, startingPoint, stoppingPoint, and 1-3 users' });
+      const { driverName, driverNumber, cabNumber, startingPoint, middleStoppagePoints, stoppingPoint, users } = cabData;
+      if (!driverName || !driverNumber || !cabNumber || !startingPoint || !stoppingPoint || !Array.isArray(users) || users.length === 0 || users.length > 3) {
+        return res.status(400).json({ message: 'Each cab must have driverName, driverNumber, cabNumber, startingPoint, stoppingPoint, and 1-3 users' });
       }
       // Create cab
       const cab = new Cab({
         driverName,
         driverNumber,
+        cabNumber,
         startingPoint,
         middleStoppagePoints: Array.isArray(middleStoppagePoints) ? middleStoppagePoints : [],
         stoppingPoint,

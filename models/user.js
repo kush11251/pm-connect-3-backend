@@ -17,7 +17,8 @@ const userSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
   phoneNumber: { type: String },
   cabStatus: { type: String },
-  cabDetail: { type: Object }
+  cabDetail: { type: Object },
+  userPreference: { type: String, enum: ['pending', 'done', 'active'], default: 'pending' }
 });
 
 const User = mongoose.model('User', userSchema);

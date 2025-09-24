@@ -5,6 +5,7 @@ const cabSchema = new mongoose.Schema({
   driverId: { type: String, required: true, unique: true, default: uuidv4 },
   driverName: { type: String, required: true },
   driverNumber: { type: String, required: true },
+  cabNumber: { type: String, required: true },
   startingPoint: { type: String, required: true },
   middleStoppagePoints: [{ type: String }],
   stoppingPoint: { type: String, required: true },

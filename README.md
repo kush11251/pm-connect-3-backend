@@ -13,6 +13,82 @@
 
 ## API Endpoints & Sample cURL
 
+### 11. User Preference APIs
+
+#### a. Submit or Update User Preference
+`POST /api/userPreference/`
+
+**Headers:**
+- `Authorization: Bearer <token>`
+
+**Body:**
+```json
+{
+  "accommodationRequired": true,
+  "arrivalDate": "2025-09-24T10:00:00.000Z", // or blank/null
+  "departureDate": "2025-09-28T18:00:00.000Z", // or blank/null
+  "foodPreference": "veg" // one of: veg, non-veg, vegan, other, none
+}
+```
+**Sample cURL:**
+```sh
+curl -X POST http://localhost:3000/api/userPreference/ \
+  -H "Authorization: Bearer <token>" \
+  -H "Content-Type: application/json" \
+  -d '{"accommodationRequired":true,"arrivalDate":"2025-09-24T10:00:00.000Z","departureDate":"2025-09-28T18:00:00.000Z","foodPreference":"veg"}'
+```
+**Response:**
+```json
+{
+  "message": "Preference saved",
+  "preference": { /* user preference object */ }
+}
+```
+
+#### b. Admin: View All User Preferences
+`GET /api/userPreference/all`
+
+**Headers:**
+- `Authorization: Bearer <token>` (must be an admin user)
+
+**Sample cURL:**
+```sh
+curl -X GET http://localhost:3000/api/userPreference/all \
+  -H "Authorization: Bearer <token>"
+```
+**Response:**
+```json
+[
+  {
+    "_id": "...",
+    "userId": { "_id": "...", "username": "jdoe", "firstName": "John", "lastName": "Doe", "email": "jdoe@example.com", "userPreference": "done" },
+    "accommodationRequired": true,
+    "arrivalDate": "2025-09-24T10:00:00.000Z",
+    "departureDate": "2025-09-28T18:00:00.000Z",
+    "foodPreference": "veg"
+  }
+  // ...more preferences
+]
+```
+
+#### c. Admin: Update User Preference Status to Active
+`PATCH /api/userPreference/status/:userId`
+
+**Headers:**
+- `Authorization: Bearer <token>` (must be an admin user)
+
+**Sample cURL:**
+```sh
+curl -X PATCH http://localhost:3000/api/userPreference/status/<userId> \
+  -H "Authorization: Bearer <token>"
+```
+**Response:**
+```json
+{
+  "message": "User preference status updated to active"
+}
+```
+
 ### 1. User Signup
 `POST /api/user/signup`
 
@@ -149,20 +225,22 @@ curl -X GET http://localhost:3000/api/user/all \
 ```json
 [
   {
-    "driverName": "Ravi Kumar",
-    "driverNumber": "9998887776",
-    "startingPoint": "A",
-    "middleStoppagePoints": ["X", "Y"],
-    "stoppingPoint": "B",
-    "users": ["<user_id1>", "<user_id2>"]
+  "driverName": "Ravi Kumar",
+  "driverNumber": "9998887776",
+  "cabNumber": "CAB1234",
+  "startingPoint": "A",
+  "middleStoppagePoints": ["X", "Y"],
+  "stoppingPoint": "B",
+  "users": ["<user_id1>", "<user_id2>"]
   },
   {
-    "driverName": "Suman Singh",
-    "driverNumber": "8887776665",
-    "startingPoint": "C",
-    "middleStoppagePoints": [],
-    "stoppingPoint": "D",
-    "users": ["<user_id3>"]
+  "driverName": "Suman Singh",
+  "driverNumber": "8887776665",
+  "cabNumber": "CAB5678",
+  "startingPoint": "C",
+  "middleStoppagePoints": [],
+  "stoppingPoint": "D",
+  "users": ["<user_id3>"]
   }
 ]
 ```
@@ -171,14 +249,14 @@ curl -X GET http://localhost:3000/api/user/all \
 curl -X POST http://localhost:3000/api/cab/allocate \
   -H "Authorization: Bearer <token>" \
   -H "Content-Type: application/json" \
-  -d '[{"driverName":"Ravi Kumar","driverNumber":"9998887776","startingPoint":"A","middleStoppagePoints":["X","Y"],"stoppingPoint":"B","users":["<user_id1>","<user_id2>"]},{"driverName":"Suman Singh","driverNumber":"8887776665","startingPoint":"C","middleStoppagePoints":[],"stoppingPoint":"D","users":["<user_id3>"]}]'
+  -d '[{"driverName":"Ravi Kumar","driverNumber":"9998887776","cabNumber":"CAB1234","startingPoint":"A","middleStoppagePoints":["X","Y"],"stoppingPoint":"B","users":["<user_id1>","<user_id2>"]},{"driverName":"Suman Singh","driverNumber":"8887776665","cabNumber":"CAB5678","startingPoint":"C","middleStoppagePoints":[],"stoppingPoint":"D","users":["<user_id3>"]}]'
 ```
 **Response:**
 ```json
 {
   "cabs": [
     {
-      "cab": { /* cab object */ },
+  "cab": { /* cab object, includes cabNumber */ },
       "failedUsers": [/* user ids that failed to update */]
     }
   ]
@@ -241,12 +319,13 @@ curl -X GET http://localhost:3000/api/cab/drivers \
 ```json
 [
   {
-    "driverId": "...",
-    "driverName": "Ravi Kumar",
-    "driverNumber": "9998887776",
-    "startingPoint": "A",
-    "middleStoppagePoints": ["X", "Y"],
-    "stoppingPoint": "B",
+  "driverId": "...",
+  "driverName": "Ravi Kumar",
+  "driverNumber": "9998887776",
+  "cabNumber": "CAB1234",
+  "startingPoint": "A",
+  "middleStoppagePoints": ["X", "Y"],
+  "stoppingPoint": "B",
     "users": [
       {
         "_id": "...",
@@ -269,7 +348,13 @@ curl -X GET http://localhost:3000/api/cab/drivers \
 - Bulk signup auto-generates password as lowercase(first+middle+last name, no spaces/special chars).
 - Login returns user data (without password) and a JWT token valid for 1 day.
 - `GET /api/user/all` requires the user to have `role: "admin"`.
-- Each cab can have a maximum of 3 users. Cab allocation updates user cab status and details.
+- Each cab can have a maximum of 3 users. Cab allocation updates user cab status and details. Each cab has a unique cabNumber field.
 - Use `/api/cab/route/:driverId` to view a driver's route and users.
 - Each cab can have multiple middle stoppage points (see `middleStoppagePoints` in allocation and cab details).
 - File upload and download endpoints have been removed as per latest requirements.
+
+### User Preference Field in User Model
+- The `userPreference` field in the user model tracks the status of user preference submission:
+  - `pending`: Default, user has not submitted preference
+  - `done`: User has submitted preference
+  - `active`: Admin has marked the preference as active
