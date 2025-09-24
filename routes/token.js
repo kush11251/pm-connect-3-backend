@@ -9,6 +9,9 @@ const router = express.Router();
 router.post('/verify', (req, res) => {
   const authHeader = req.headers['authorization'];
   const token = authHeader && authHeader.split(' ')[1];
+
+  console.log(token);
+
   if (!token) return res.json({ valid: false });
   jwt.verify(token, SECRET, (err, user) => {
     if (err) return res.json({ valid: false });

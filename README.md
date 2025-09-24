@@ -286,6 +286,23 @@ curl -X GET http://localhost:3000/api/cab/route/<driverId> \
 curl -X POST http://localhost:3000/api/token/verify \
   -H "Authorization: Bearer <token>"
 ```
+**Response (valid token):**
+```json
+{
+  "valid": true,
+  "user": {
+    "id": "...",
+    "username": "..."
+    // ...other token fields
+  }
+}
+```
+**Response (invalid or missing token):**
+```json
+{
+  "valid": false
+}
+```
 
 ### 9. Generate Token (Demo)
 `POST /api/token/generate`
