@@ -15,6 +15,29 @@
 
 ### 11. User Preference APIs
 
+#### d. Get Current User's Preference
+`GET /api/userPreference/`
+
+**Headers:**
+- `Authorization: Bearer <token>`
+
+**Sample cURL:**
+```sh
+curl -X GET http://localhost:3000/api/userPreference/ \
+  -H "Authorization: Bearer <token>"
+```
+**Response:**
+```json
+{
+  "_id": "...",
+  "userId": "...",
+  "accommodationRequired": true,
+  "arrivalDate": "2025-09-24T10:00:00.000Z",
+  "departureDate": "2025-09-28T18:00:00.000Z",
+  "foodPreference": "veg"
+}
+```
+
 #### a. Submit or Update User Preference
 `POST /api/userPreference/`
 

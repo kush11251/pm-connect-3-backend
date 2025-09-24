@@ -7,6 +7,7 @@ const mongoose = require('mongoose');
 const userRoutes = require('./routes/user');
 const tokenRoutes = require('./routes/token');
 const cabRoutes = require('./routes/cab');
+const userPreference = require('./routes/userPreference');
 
 
 const app = express();
@@ -24,6 +25,7 @@ mongoose.connect(process.env.MONGODB_URL, {})
 app.use('/api/user', userRoutes);
 app.use('/api/token', tokenRoutes);
 app.use('/api/cab', cabRoutes);
+app.use('/api/userPreference', userPreference);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

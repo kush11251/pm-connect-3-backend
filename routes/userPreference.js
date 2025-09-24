@@ -30,10 +30,12 @@ router.post('/', auth, async (req, res) => {
 // Admin: View all user preferences
 router.get('/all', auth, async (req, res) => {
   try {
+    console.log(req.user);
+
     if (req.user.role !== 'admin') {
       return res.status(403).json({ message: 'Admin access required' });
     }
-    const prefs = await UserPreference.find().populate('userId', 'username firstName lastName email userPreference');
+    const prefs = await UserPreference.find().populate('userId', 'username firstName middleName lastName email phoneNumber userPreference');
     res.json(prefs);
   } catch (err) {
     res.status(500).json({ message: 'Server error', error: err.message });
@@ -55,6 +57,18 @@ router.patch('/status/:userId', auth, async (req, res) => {
     user.userPreference = 'active';
     await user.save();
     res.json({ message: 'User preference status updated to active' });
+  } catch (err) {
+    res.status(500).json({ message: 'Server error', error: err.message });
+  }
+});
+
+// Get current user's preference
+router.get('/', auth, async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const pref = await UserPreference.findOne({ userId });
+    if (!pref) return res.status(404).json({ message: 'No preference found for this user' });
+    res.json(pref);
   } catch (err) {
     res.status(500).json({ message: 'Server error', error: err.message });
   }
