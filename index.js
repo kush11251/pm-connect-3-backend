@@ -8,7 +8,7 @@ const userRoutes = require('./routes/user');
 const tokenRoutes = require('./routes/token');
 const cabRoutes = require('./routes/cab');
 const userPreference = require('./routes/userPreference');
-
+const adminTools = require('./routes/devtools');
 
 const app = express();
 app.use(cors());
@@ -26,6 +26,7 @@ app.use('/api/user', userRoutes);
 app.use('/api/token', tokenRoutes);
 app.use('/api/cab', cabRoutes);
 app.use('/api/userPreference', userPreference);
+app.use('/api/devtools', adminTools);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

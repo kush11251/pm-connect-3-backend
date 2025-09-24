@@ -13,6 +13,41 @@
 
 ## API Endpoints & Sample cURL
 
+### 12. Devtools APIs
+
+#### a. Delete All Data (admin only)
+`DELETE /api/devtools/all-data`
+
+**Headers:**
+- `Authorization: Bearer <token>` (must be an admin user)
+
+**Sample cURL:**
+```sh
+curl -X DELETE http://localhost:3000/api/devtools/all-data \
+  -H "Authorization: Bearer <token>"
+```
+**Response:**
+```json
+{
+  "message": "All data deleted from User, Cab, and UserPreference collections."
+}
+```
+
+#### b. Signup Master Admin User
+`POST /api/devtools/signup-master`
+
+**Sample cURL:**
+```sh
+curl -X POST http://localhost:3000/api/devtools/signup-master
+```
+**Response:**
+```json
+{
+  "message": "Master admin user created",
+  "user": { /* user object */ }
+}
+```
+
 ### 11. User Preference APIs
 
 #### d. Get Current User's Preference
