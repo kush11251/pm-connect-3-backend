@@ -1,0 +1,25 @@
+
+const mongoose = require('mongoose');
+
+
+const { v4: uuidv4 } = require('uuid');
+const userSchema = new mongoose.Schema({
+  uuid: { type: String, required: true, unique: true, default: uuidv4 },
+  username: { type: String, required: true, unique: true },
+  password: { type: String, required: true },
+  firstName: { type: String, required: true },
+  middleName: { type: String },
+  lastName: { type: String, required: true },
+  gender: { type: String, enum: ['male', 'female', 'others'] },
+  post: { type: String },
+  role: { type: String },
+  project: { type: String },
+  email: { type: String, required: true, unique: true },
+  phoneNumber: { type: String },
+  cabStatus: { type: String },
+  cabDetail: { type: Object }
+});
+
+const User = mongoose.model('User', userSchema);
+
+module.exports = User;
