@@ -6,8 +6,14 @@ const { SECRET } = require('../middleware/auth');
 const router = express.Router();
 
 // Token verification endpoint
-router.post('/verify', auth, (req, res) => {
-  res.json({ valid: true, user: req.user });
+router.post('/verify', (req, res) => {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
+  if (!token) return res.json({ valid: false });
+  jwt.verify(token, SECRET, (err, user) => {
+    if (err) return res.json({ valid: false });
+    res.json({ valid: true, user });
+  });
 });
 
 // Generate a new token (for demo)
