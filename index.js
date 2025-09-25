@@ -10,6 +10,8 @@ const cabRoutes = require('./routes/cab');
 const userPreference = require('./routes/userPreference');
 const adminTools = require('./routes/devtools');
 
+const fileUpload = require('./routes/fileUpload');
+
 const app = express();
 app.use(cors());
 app.use(express.json());
@@ -27,6 +29,9 @@ app.use('/api/token', tokenRoutes);
 app.use('/api/cab', cabRoutes);
 app.use('/api/userPreference', userPreference);
 app.use('/api/devtools', adminTools);
+app.use('/api/fileUpload', fileUpload);
+
+// Start server
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

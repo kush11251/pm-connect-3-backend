@@ -18,7 +18,8 @@ const userSchema = new mongoose.Schema({
   phoneNumber: { type: String },
   cabStatus: { type: String },
   cabDetail: { type: Object },
-  userPreference: { type: String, enum: ['pending', 'done', 'active'], default: 'pending' }
+  userPreference: { type: String, enum: ['pending', 'done', 'active'], default: 'pending' },
+    userImage: { type: String, default: 'https://res.cloudinary.com/db5wkftfk/image/upload/v1758762573/app_uploads/z5an954xmn9zylti9fmp.png' }
 });
 
 const User = mongoose.model('User', userSchema);
