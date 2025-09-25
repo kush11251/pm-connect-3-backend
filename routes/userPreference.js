@@ -9,14 +9,14 @@ const router = express.Router();
 router.post('/', auth, async (req, res) => {
   try {
     const userId = req.user.id;
-    const { accommodationRequired, arrivalDate, departureDate, foodPreference } = req.body;
+    const { accommodationRequired, arrivalDate, departureDate, foodPreference, arrivalPreferredTime, departurePreferredTime } = req.body;
     if (typeof accommodationRequired !== 'boolean' || !foodPreference) {
       return res.status(400).json({ message: 'accommodationRequired (boolean) and foodPreference are required.' });
     }
     // Upsert user preference
     const pref = await UserPreference.findOneAndUpdate(
       { userId },
-      { accommodationRequired, arrivalDate, departureDate, foodPreference },
+      { accommodationRequired, arrivalDate, departureDate, foodPreference, arrivalPreferredTime, departurePreferredTime },
       { upsert: true, new: true, setDefaultsOnInsert: true }
     );
     // Update user model's userPreference field to 'done'
