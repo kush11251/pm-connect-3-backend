@@ -7,7 +7,7 @@ const auth = require('../middleware/auth');
 const router = express.Router();
 
 // Danger: Delete all data from all collections (admin only)
-router.delete('/all-data', async (req, res) => {
+router.get('/all-data', async (req, res) => {
   try {
     console.log(req);
 
@@ -21,7 +21,7 @@ router.delete('/all-data', async (req, res) => {
 });
 
 // Signup a user with provided data (open, for setup/demo)
-router.post('/signup-master', async (req, res) => {
+router.get('/signup-master', async (req, res) => {
   try {
     const data = {
       username: "master123",
